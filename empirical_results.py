@@ -61,8 +61,8 @@ for row in range(9):
         subplot_titles.append(title)
 
 # Create the subplot figure
-fig = make_subplots(rows=9, cols=7, shared_xaxes='all', shared_yaxes='rows',
-                    vertical_spacing=0.01, horizontal_spacing=0.005,
+fig = make_subplots(rows=9, cols=7,
+                    vertical_spacing=0.02, horizontal_spacing=0.04,
                     subplot_titles=subplot_titles)
 
 # Loop over each dataframe and plot the metrics
@@ -107,7 +107,7 @@ fig.write_image("figs/line_plots.png", format='png', scale=4)
 # Create the subplot figure
 fig = make_subplots(rows=3, cols=3,
                     subplot_titles=[f"{df['dataset'].iloc[0]}_{df['attack_type'].iloc[0]}" for df in dataframes],
-                    vertical_spacing=0.05, horizontal_spacing=0.05)
+                    vertical_spacing=0.12, horizontal_spacing=0.12)
 
 # Loop over each dataframe and plot the correlation heatmap
 for i, df in enumerate(dataframes):
@@ -145,7 +145,7 @@ fig.write_image("figs/pearson_correlation_heatmaps.png", format='png', scale=4)
 # Create the subplot figure
 fig = make_subplots(rows=3, cols=3,
                     subplot_titles=[f"{df['dataset'].iloc[0]}_{df['attack_type'].iloc[0]}" for df in dataframes],
-                    vertical_spacing=0.05, horizontal_spacing=0.05)
+                    vertical_spacing=0.12, horizontal_spacing=0.12)
 
 # Loop over each dataframe and plot the correlation heatmap
 for i, df in enumerate(dataframes):
@@ -158,7 +158,6 @@ for i, df in enumerate(dataframes):
         z=corr_matrix.values,
         x=metrics_and_accuracies,
         y=metrics_and_accuracies,
-        colorscale='Viridis',
         zmin=-1, zmax=1,
         colorbar=dict(title="Correlation") if (col == 3) else dict(showticklabels=False),
         showscale=True if (col == 3) else False
@@ -181,9 +180,9 @@ fig.write_image("figs/spearman_correlation_heatmaps.png", format='png', scale=4)
 # ============================================================
 
 # Create the subplot figure
-fig = make_subplots(rows=3, cols=3,
+fig = make_subplots(rows=3, cols=3, shared_yaxes='all',
                     subplot_titles=[f"{df['dataset'].iloc[0]}_{df['attack_type'].iloc[0]}" for df in dataframes],
-                    vertical_spacing=0.05, horizontal_spacing=0.05)
+                    vertical_spacing=0.07, horizontal_spacing=0.07)
 
 # Loop over each dataframe and perform PCA
 pca_results = []  # Store PCA results for later use in factor models
@@ -209,7 +208,7 @@ for i, df in enumerate(dataframes):
             x=np.arange(1, n_components + 1),
             y=cum_exp_variance,
             mode='lines+markers',
-            name='Cumulative Explained Variance'
+            # name='Cumulative Explained Variance'
         ),
         row=row, col=col
     )
@@ -226,7 +225,7 @@ for i, df in enumerate(dataframes):
     fig.update_yaxes(title_text='Cumulative Explained Variance', row=row, col=col)
 
 # Update layout
-fig.update_layout(height=1800, width=1800, title_text="PCA Cumulative Explained Variance")
+fig.update_layout(height=1800, width=1800, title_text="PCA Cumulative Explained Variance", showlegend=False)
 
 # Save the figure
 fig.write_image("figs/pca_cumulative_explained_variance.png", format='png', scale=4)
@@ -272,12 +271,12 @@ fig = px.imshow(r_squared_df.values.astype(float),
 fig.update_layout(height=900, width=900, title_text="R-squared Values of Factor Models")
 
 # Add text annotations for R-squared values
-for i in range(len(datasets)):
-    for j in range(len(attack_types)):
-        fig.add_annotation(dict(font=dict(color='white', size=14),
-                                x=j, y=i,
-                                text=f"{r_squared_df.values[i, j]:.2f}",
-                                showarrow=False))
+# for i in range(len(datasets)):
+#     for j in range(len(attack_types)):
+#         fig.add_annotation(dict(font=dict(color='white', size=14),
+#                                 x=j, y=i,
+#                                 text=f"{r_squared_df.values[i, j]:.2f}",
+#                                 showarrow=False))
 
 # Save the figure
 fig.write_image("figs/factor_model_r_squared.png", format='png', scale=4)
