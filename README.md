@@ -43,7 +43,7 @@ This heatmap presents the R-squared values of the factor models obtained by regr
 The following code was used to perform the attacks and generate the results:
 
 ```python
-datasets = ['Cora', 'CiteSeer', 'PubMed']
+datasets = ['Cora', 'CiteSeer']
 attack_types = ['random', 'fg_random', 'fg_betweenness']
 n_iterations = 60
 

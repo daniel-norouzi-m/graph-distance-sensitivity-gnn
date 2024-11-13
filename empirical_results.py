@@ -1,3 +1,4 @@
+#%%
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
@@ -10,7 +11,7 @@ from sklearn.linear_model import LinearRegression
 
 #%%
 # Define the datasets and attack types
-datasets = ['Cora', 'CiteSeer', 'PubMed']
+datasets = ['Cora', 'CiteSeer']
 attack_types = ['random', 'fg_random', 'fg_betweenness']
 
 # Create a list to store the dataframes
@@ -52,7 +53,7 @@ metrics_and_accuracies = metrics  # For correlation plots
 
 # Create subplot titles for the top row (metrics names)
 subplot_titles = []
-for row in range(9):
+for row in range(6):
     for col in range(7):
         if row == 0:
             title = metrics[col].replace('_', ' ').title()
@@ -61,7 +62,7 @@ for row in range(9):
         subplot_titles.append(title)
 
 # Create the subplot figure
-fig = make_subplots(rows=9, cols=7,
+fig = make_subplots(rows=6, cols=7,
                     vertical_spacing=0.02, horizontal_spacing=0.04,
                     subplot_titles=subplot_titles)
 
@@ -88,12 +89,12 @@ for i, df in enumerate(dataframes):
         if col == 1:
             fig.update_yaxes(title_text=yaxis_title, row=row, col=col)
         # Set x-axis title for the last row
-        if row == 9:
+        if row == 6:
             fig.update_xaxes(title_text='Iteration', row=row, col=col)
         # Set the subplot title for the top row (already set via subplot_titles)
 
 # Update layout
-fig.update_layout(height=1800, width=1400, showlegend=False,
+fig.update_layout(height=1200, width=1400, showlegend=False,
                   title_text="Evolution of Distance Metrics and Accuracies")
 
 # Save the figure
@@ -105,7 +106,7 @@ fig.write_image("figs/line_plots.png", format='png', scale=4)
 # ============================================================
 
 # Create the subplot figure
-fig = make_subplots(rows=3, cols=3,
+fig = make_subplots(rows=2, cols=3,
                     subplot_titles=[f"{df['dataset'].iloc[0]}_{df['attack_type'].iloc[0]}" for df in dataframes],
                     vertical_spacing=0.12, horizontal_spacing=0.12)
 
@@ -132,7 +133,7 @@ for i, df in enumerate(dataframes):
     fig.update_yaxes(row=row, col=col)
 
 # Update layout
-fig.update_layout(height=1800, width=1800, title_text="Pearson Correlation Heatmaps")
+fig.update_layout(height=1200, width=1800, title_text="Pearson Correlation Heatmaps")
 
 # Save the figure
 fig.write_image("figs/pearson_correlation_heatmaps.png", format='png', scale=4)
@@ -143,7 +144,7 @@ fig.write_image("figs/pearson_correlation_heatmaps.png", format='png', scale=4)
 # ============================================================
 
 # Create the subplot figure
-fig = make_subplots(rows=3, cols=3,
+fig = make_subplots(rows=2, cols=3,
                     subplot_titles=[f"{df['dataset'].iloc[0]}_{df['attack_type'].iloc[0]}" for df in dataframes],
                     vertical_spacing=0.12, horizontal_spacing=0.12)
 
@@ -169,7 +170,7 @@ for i, df in enumerate(dataframes):
     fig.update_yaxes(row=row, col=col)
 
 # Update layout
-fig.update_layout(height=1800, width=1800, title_text="Spearman Rank Correlation Heatmaps")
+fig.update_layout(height=1200, width=1800, title_text="Spearman Rank Correlation Heatmaps")
 
 # Save the figure
 fig.write_image("figs/spearman_correlation_heatmaps.png", format='png', scale=4)
@@ -180,7 +181,7 @@ fig.write_image("figs/spearman_correlation_heatmaps.png", format='png', scale=4)
 # ============================================================
 
 # Create the subplot figure
-fig = make_subplots(rows=3, cols=3, shared_yaxes='all',
+fig = make_subplots(rows=2, cols=3, shared_yaxes='all',
                     subplot_titles=[f"{df['dataset'].iloc[0]}_{df['attack_type'].iloc[0]}" for df in dataframes],
                     vertical_spacing=0.07, horizontal_spacing=0.07)
 
@@ -225,7 +226,7 @@ for i, df in enumerate(dataframes):
     fig.update_yaxes(title_text='Cumulative Explained Variance', row=row, col=col)
 
 # Update layout
-fig.update_layout(height=1800, width=1800, title_text="PCA Cumulative Explained Variance", showlegend=False)
+fig.update_layout(height=1200, width=1800, title_text="PCA Cumulative Explained Variance", showlegend=False)
 
 # Save the figure
 fig.write_image("figs/pca_cumulative_explained_variance.png", format='png', scale=4)
@@ -268,7 +269,7 @@ fig = px.imshow(r_squared_df.values.astype(float),
                 color_continuous_scale='Viridis',
                 labels=dict(x="Attack Type", y="Dataset", color="R-squared"),
                 text_auto=True)
-fig.update_layout(height=900, width=900, title_text="R-squared Values of Factor Models")
+fig.update_layout(height=600, width=900, title_text="R-squared Values of Factor Models")
 
 # Add text annotations for R-squared values
 # for i in range(len(datasets)):
