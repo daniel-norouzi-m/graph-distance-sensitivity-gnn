@@ -2,9 +2,9 @@ import os
 
 from graph_attacks import perform_attack
 
-datasets = ['Cora', 'CiteSeer', 'PubMed']
+datasets = ['Cora', 'CiteSeer']
 attack_types = ['random', 'fg_random', 'fg_betweenness']
-n_iterations = 60
+n_iterations = 100
 
 # Define the output directory
 output_dir = "attack_results"
