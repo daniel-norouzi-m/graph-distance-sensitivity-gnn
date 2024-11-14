@@ -2,15 +2,15 @@
 
 This project focuses on performing targeted attacks on graph datasets by perturbing links using different methodologies. The main objective is to compare the original and perturbed graphs during the attack using several graph distance metrics and to analyze the evolution of these distance metrics over time (iterations, which represent the number of attacked nodes).
 
-### Graph Attacks
+## Graph Attacks
 
-#### Random Attack
+### Random Attack
 
 - Randomly select a set of nodes $\mathcal{V}_{\text{attack}} \subset \mathcal{V}$.
 - For each node $v \in \mathcal{V}_{\text{attack}}$, randomly modify edges by adding or removing connections:
   $$\text{Modify edges } \mathcal{E}_v \subseteq \{(v, u) \mid u \in \mathcal{V},\ u \neq v\}$$
 
-#### Fast Gradient Attack (Random Nodes)
+### Fast Gradient Attack (Random Nodes)
 
 - Randomly select a set of nodes $\mathcal{V}_{\text{attack}} \subset \mathcal{V}$.
 - For each node $v \in \mathcal{V}_{\text{attack}}$:
@@ -23,7 +23,7 @@ $$\nabla_A \mathcal{L}(v) = \frac{\partial \mathcal{L}(v)}{\partial A}$$
  
 $$A' = A + \epsilon \cdot \text{sign}\left( \nabla_A \mathcal{L}(v) \right)$$
 
-#### Fast Gradient Attack (Betweenness Centrality)
+### Fast Gradient Attack (Betweenness Centrality)
 
 - Compute betweenness centrality scores $C_B(v)$ for all nodes $v \in \mathcal{V}$.
 - Select a set of nodes with the highest betweenness centrality:
