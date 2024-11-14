@@ -24,7 +24,7 @@ These heatmaps display the Pearson and Spearman correlations between the distanc
 
 ### PCA Cumulative Explained Variance
 
-This figure shows the cumulative explained variance obtained from applying PCA to the distance metrics for each dataset and attack type. A horizontal line at a threshold of 0.9 is included.
+This figure shows the cumulative explained variance obtained from applying PCA to the distance metrics for each dataset and attack type. A horizontal line at a threshold of 0.999 is included.
 
 <p align="center">
   <img src="figs/pca_cumulative_explained_variance.png" alt="PCA Cumulative Explained Variance" width="800">
