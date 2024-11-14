@@ -45,7 +45,7 @@ The following code was used to perform the attacks and generate the results:
 ```python
 datasets = ['Cora', 'CiteSeer']
 attack_types = ['random', 'fg_random', 'fg_betweenness']
-n_iterations = 60
+n_iterations = 100
 
 # Define the output directory
 output_dir = "attack_results"
