@@ -155,7 +155,7 @@ R^2 = 1 - \frac{ \sum_{i=1}^n ( y_i - \hat{y}_i )^2 }{ \sum_{i=1}^n ( y_i - \bar
   where $\hat{y}_i$ is the predicted value, and $\bar{y}$ is the mean of $y$.
 
 <p align="center">
-  <img src="figs/factor_model_r_squared.png" alt="R-squared Values of Factor Models" width="500">
+  <img src="figs/factor_model_r_squared.png" alt="R-squared Values of Factor Models" width="800">
 </p>
 
 ## Code
