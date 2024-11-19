@@ -142,7 +142,7 @@ These bar plots present the R-squared values of the factor models obtained by re
 
 - **Linear Regression Model**:
 
-  $$y = \beta_0 + \beta_1 Z_1 + \beta_2 Z_2 + \beta_3 Z_3 + \beta_4 Z_4 + \beta_5 Z_5 + \varepsilon$$
+$$y = \beta_0 + \beta_1 Z_1 + \beta_2 Z_2 + \beta_3 Z_3 + \beta_4 Z_4 + \beta_5 Z_5 + \varepsilon$$
 
   where $y$ is the GCN accuracy, $Z_i$ are the principal components, $\beta_i$ are coefficients, and $\varepsilon$ is the error term.
 
