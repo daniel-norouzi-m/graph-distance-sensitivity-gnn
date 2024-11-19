@@ -136,15 +136,15 @@ $$Z = X W$$
 
 ### R-squared Values of Factor Models
 
-This heatmap presents the R-squared values of the factor models obtained by regressing the top principal components (factors) to explain the GCN accuracy over time for each dataset and attack type.
+These bar plots present the R-squared values of the factor models obtained by regressing several numbers of principal components (factors) to explain the GCN accuracy over time for each dataset and attack type.
 
 **Mathematical Formulations:**
 
 - **Linear Regression Model**:
 
-  $$y = \beta_0 + \beta_1 Z_1 + \beta_2 Z_2 + \beta_3 Z_3 + \varepsilon$$
+  $$y = \beta_0 + \beta_1 Z_1 + \beta_2 Z_2 + \beta_3 Z_3 + \beta_4 Z_4 + \beta_5 Z_5 + \varepsilon$$
 
-  where $y$ is the GCN accuracy, $Z_i$ are the top principal components, $\beta_i$ are coefficients, and $\varepsilon$ is the error term.
+  where $y$ is the GCN accuracy, $Z_i$ are the principal components, $\beta_i$ are coefficients, and $\varepsilon$ is the error term.
 
 - **Coefficient of Determination ($R^2$)**:
 

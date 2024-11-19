@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-import plotly.express as px
 import os
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
@@ -209,6 +208,7 @@ for i, df in enumerate(dataframes):
             x=np.arange(1, n_components + 1),
             y=cum_exp_variance,
             mode='lines+markers',
+            fill='tozeroy'
             # name='Cumulative Explained Variance'
         ),
         row=row, col=col
@@ -217,13 +217,13 @@ for i, df in enumerate(dataframes):
     fig.add_shape(
         type='line',
         x0=1, x1=n_components,
-        y0=0.9, y1=0.9,
+        y0=0.999, y1=0.999,
         line=dict(color='red', dash='dash'),
         row=row, col=col
     )
     # Update axes
     fig.update_xaxes(title_text='Number of Components', row=row, col=col)
-    fig.update_yaxes(title_text='Cumulative Explained Variance', row=row, col=col)
+    fig.update_yaxes(title_text='Cumulative Explained Variance', range=[0.98, 1], row=row, col=col)
 
 # Update layout
 fig.update_layout(height=1200, width=1800, title_text="PCA Cumulative Explained Variance", showlegend=False)
@@ -239,6 +239,12 @@ fig.write_image("figs/pca_cumulative_explained_variance.png", format='png', scal
 # Create a DataFrame to store R-squared values
 r_squared_df = pd.DataFrame(index=datasets, columns=attack_types)
 
+# Define the number of principal components to test
+max_pca_components = 5  # You can adjust this as needed
+
+# Create a list to store R-squared values for plotting
+r_squared_plot_data = []
+
 for idx, df in enumerate(dataframes):
     dataset_name = df['dataset'].iloc[0]
     attack_type = df['attack_type'].iloc[0]
@@ -249,35 +255,100 @@ for idx, df in enumerate(dataframes):
     # Standardize the data using the same scaler
     X_scaled = scaler.transform(X)
     # Transform data using PCA
-    X_pca = pca.transform(X_scaled)[:, :3]  # Take top 3 components
+    X_pca_full = pca.transform(X_scaled)  # All principal components
     # Dependent variable: GCN accuracy
     y = df['gcn_accuracy'].values
-    # Fit linear regression model
-    reg = LinearRegression()
-    reg.fit(X_pca, y)
-    # Compute R-squared
-    r_squared = reg.score(X_pca, y)
-    # Store R-squared value
-    r_squared_df.loc[dataset_name, attack_type] = r_squared
+    
+    # Compute R-squared for different numbers of principal components
+    r_squared_values = []
+    for n_components in range(1, max_pca_components + 1):
+        X_pca = X_pca_full[:, :n_components]
+        # Fit linear regression model
+        reg = LinearRegression()
+        reg.fit(X_pca, y)
+        # Compute R-squared
+        r_squared = reg.score(X_pca, y)
+        r_squared_values.append(r_squared)
+    
+    # Store R-squared values for the current configuration
+    r_squared_df.loc[dataset_name, attack_type] = r_squared_values[-1]  # Last R-squared value with max components
+    
+    # Append data for plotting
+    r_squared_plot_data.append({
+        'dataset': dataset_name,
+        'attack_type': attack_type,
+        'r_squared_values': r_squared_values
+    })
 
-# Convert r_squared_df to numeric
-r_squared_df = r_squared_df.apply(pd.to_numeric)
+# Define subplot grid dimensions
+rows = 2
+cols = 3
 
-# Plot the heatmap of R-squared values
-fig = px.imshow(r_squared_df.values.astype(float),
-                x=attack_types, y=datasets,
-                color_continuous_scale='Viridis',
-                labels=dict(x="Attack Type", y="Dataset", color="R-squared"),
-                text_auto=True)
-fig.update_layout(height=600, width=900, title_text="R-squared Values of Factor Models")
+# Create subplot titles based on dataset and attack type
+subplot_titles = [f"{item['dataset']} - {item['attack_type']}" for item in r_squared_plot_data]
 
-# Add text annotations for R-squared values
-# for i in range(len(datasets)):
-#     for j in range(len(attack_types)):
-#         fig.add_annotation(dict(font=dict(color='white', size=14),
-#                                 x=j, y=i,
-#                                 text=f"{r_squared_df.values[i, j]:.2f}",
-#                                 showarrow=False))
+# Create the subplot figure
+fig = make_subplots(
+    rows=rows,
+    cols=cols,
+    subplot_titles=subplot_titles,
+    horizontal_spacing=0.1,
+    vertical_spacing=0.12
+)
 
-# Save the figure
+
+# Determine the global min and max R-squared values for consistent coloring
+all_r_squared = [val for item in r_squared_plot_data for val in item['r_squared_values']]
+min_r_squared = min(all_r_squared)
+max_r_squared = max(all_r_squared)
+
+# Iterate over each subplot configuration
+for i, item in enumerate(r_squared_plot_data):
+    row = (i // cols) + 1
+    col = (i % cols) + 1
+    dataset = item['dataset']
+    attack = item['attack_type']
+    r2_values = item['r_squared_values']
+    num_components = list(range(1, max_pca_components + 1))
+    
+    # Create a bar trace
+    trace = go.Bar(
+        x=num_components,
+        y=r2_values,
+        marker=dict(
+            color=r2_values,
+            cmin=min_r_squared,
+            cmax=max_r_squared,
+            colorbar=dict(
+                title="R^2",
+                titleside="top",
+                ticks="outside",
+                showticksuffix="last"
+            )
+        ),
+        text=[f"{val:.3f}" for val in r2_values],
+        textposition='auto',
+        name=f"{dataset} - {attack}"
+    )
+    
+    # Add the trace to the subplot
+    fig.add_trace(trace, row=row, col=col)
+    
+    # Update x-axis
+    fig.update_xaxes(title_text="Number of Principal Components", row=row, col=col)
+    # Update y-axis
+    fig.update_yaxes(title_text="R^2", range=[0.75, 1], row=row, col=col)
+
+# Update overall layout
+fig.update_layout(
+    height=1200,  
+    width=1800,   
+    title_text="R-squared Values of Factor Models Across Configurations",
+    showlegend=False
+)
+
+# Save the figure as a PNG image with specified scale
 fig.write_image("figs/factor_model_r_squared.png", format='png', scale=4)
+
+# Optionally display the figure in an interactive window (requires an appropriate environment)
+fig.show()
