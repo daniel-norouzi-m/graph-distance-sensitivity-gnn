@@ -1,5 +1,6 @@
 name: pytorch_geometric
 channels:
+  - pyg
   - pytorch
   - nvidia
   - conda-forge
@@ -13,14 +14,13 @@ dependencies:
   - scikit-learn
   - tqdm
   - plotly
-  - pytorch=2.5.0
+  - pytorch
   - torchvision
   - torchaudio
-  - pytorch-cuda=12.1
+  - pytorch-cuda
+  - pyg
   - pip
   - pip:
-    - torch_geometric
-    - pyg_lib
     - torch_scatter
     - torch_sparse
     - torch_cluster
