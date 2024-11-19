@@ -8,7 +8,8 @@ This project focuses on performing targeted attacks on graph datasets by perturb
 
 - Randomly select a set of nodes $\mathcal{V}_{\text{attack}} \subset \mathcal{V}$.
 - For each node $v \in \mathcal{V}_{\text{attack}}$, randomly modify edges by adding or removing connections:
-  $$\text{Modify edges } \mathcal{E}_v \subseteq \{(v, u) \mid u \in \mathcal{V},\ u \neq v\}$$
+
+$$\text{Modify edges } \mathcal{E}_v \subseteq \set{(v, u) \mid u \in \mathcal{V},\ u \neq v}$$
 
 ### Fast Gradient Attack (Random Nodes)
 
@@ -28,7 +29,7 @@ $$A' = A + \epsilon \cdot \text{sign}\left( \nabla_A \mathcal{L}(v) \right)$$
 - Compute betweenness centrality scores $C_B(v)$ for all nodes $v \in \mathcal{V}$.
 - Select a set of nodes with the highest betweenness centrality:
   
-$$\mathcal{V}_{\text{attack}} = \{ v \in \mathcal{V} \mid C_B(v) \text{ is among top } k \}$$
+$$\mathcal{V}_{\text{attack}} = \set{ v \in \mathcal{V} \mid C_B(v) \text{ is among top } k }$$
 
 - For each node $v \in \mathcal{V}_{\text{attack}}$:
   - Compute the gradient of the loss $\mathcal{L}$ with respect to the adjacency matrix $A$:
@@ -162,6 +163,10 @@ R^2 = 1 - \frac{ \sum_{i=1}^n ( y_i - \hat{y}_i )^2 }{ \sum_{i=1}^n ( y_i - \bar
 The following code was used to perform the attacks and generate the results:
 
 ```python
+import os
+
+from graph_attacks import perform_attack
+
 datasets = ['Cora', 'CiteSeer']
 attack_types = ['random', 'fg_random', 'fg_betweenness']
 n_iterations = 100
