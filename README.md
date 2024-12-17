@@ -83,7 +83,7 @@ $$\text{Accuracy}_{\text{LP}} = \frac{ \text{Number of Correct Predictions} }{ \
   <img src="figs/line_plots.png" alt="Evolution of Distance Metrics and Accuracies" width="800">
 </p>
 
-### Correlation Heatmaps
+### Correlation Heatmap
 
 These heatmaps display the Pearson and Spearman correlations between the distance metrics and accuracies for each dataset and attack type.
 
